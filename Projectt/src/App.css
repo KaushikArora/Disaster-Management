@@ -1,0 +1,8 @@
+/* Removed boilerplate vite styles, keeping only global overrides if necessary */
+
+#root {
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
