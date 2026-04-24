@@ -1,4 +1,4 @@
-import { Moon, Sun, Menu, X, LogOut, User, Shield } from 'lucide-react';
+import { Menu, X, LogOut, User, Shield } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 interface HeaderProps {
@@ -81,14 +81,6 @@ export function Header({ currentPage, onNavigate, darkMode, toggleDarkMode, isAu
 
           {/* Right Actions */}
           <div className="flex items-center gap-4">
-            <button
-              onClick={toggleDarkMode}
-              className="p-2.5 rounded-full bg-white/50 dark:bg-slate-800/50 border border-white/40 dark:border-slate-700/50 text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 hover:scale-110 transition-all shadow-sm"
-              aria-label="Toggle dark mode"
-            >
-              {darkMode ? <Sun className="w-5 h-5 animate-in spin-in" /> : <Moon className="w-5 h-5 animate-in spin-in" />}
-            </button>
-
             {isAuthenticated && (
               <div className="hidden md:flex items-center gap-4 pl-4 border-l border-slate-200 dark:border-slate-700">
                 <div className="flex items-center gap-3">
