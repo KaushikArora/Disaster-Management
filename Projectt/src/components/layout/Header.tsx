@@ -4,14 +4,13 @@ import { useState, useEffect } from 'react';
 interface HeaderProps {
   currentPage: string;
   onNavigate: (page: string) => void;
-  darkMode: boolean;
-  toggleDarkMode: () => void;
+
   isAuthenticated: boolean;
   onLogout: () => void;
   userRole?: 'admin' | 'user' | null;
 }
 
-export function Header({ currentPage, onNavigate, darkMode, toggleDarkMode, isAuthenticated, onLogout, userRole }: HeaderProps) {
+export function Header({ currentPage, onNavigate, isAuthenticated, onLogout, userRole }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 

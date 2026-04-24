@@ -134,10 +134,6 @@ export default function App() {
     }
   }, [darkMode]);
 
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-  };
-
   const renderPage = () => {
     switch (currentPage) {
       case 'home':
@@ -166,8 +162,6 @@ export default function App() {
       <Header
         currentPage={currentPage}
         onNavigate={handleNavigate}
-        darkMode={darkMode}
-        toggleDarkMode={toggleDarkMode}
         isAuthenticated={isAuthenticated}
         onLogout={handleLogout}
         userRole={userRole}
