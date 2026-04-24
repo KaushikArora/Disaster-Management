@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { VolunteerProfileCard } from '../VolunteerProfileCard';
 import { UserPlus, X } from 'lucide-react';
 
@@ -7,16 +7,18 @@ export function VolunteerPage() {
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', location: '', experience: '' });
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
-  const volunteers = [
-    { name: 'Dr. Sarah Johnson', role: 'Medical Response Lead', location: 'Central District', email: 'sarah.j@volunteer.org', phone: '+1 (555) 234-5678', missions: 47, avatar: '👩‍⚕️' },
-    { name: 'Mike Chen', role: 'Search & Rescue Specialist', location: 'North Region', email: 'mike.chen@volunteer.org', phone: '+1 (555) 345-6789', missions: 52, avatar: '👨‍🚒' },
-    { name: 'Emily Rodriguez', role: 'Logistics Coordinator', location: 'River Valley', email: 'emily.r@volunteer.org', phone: '+1 (555) 456-7890', missions: 38, avatar: '👩‍💼' },
-    { name: 'James Williams', role: 'Emergency Communications', location: 'Coastal Area', email: 'james.w@volunteer.org', phone: '+1 (555) 567-8901', missions: 41, avatar: '👨‍💻' },
-    { name: 'Lisa Anderson', role: 'Community Outreach', location: 'Mountain Ridge', email: 'lisa.a@volunteer.org', phone: '+1 (555) 678-9012', missions: 35, avatar: '👩‍🏫' },
-    { name: 'David Kumar', role: 'Equipment Manager', location: 'South District', email: 'david.k@volunteer.org', phone: '+1 (555) 789-0123', missions: 29, avatar: '👨‍🔧' },
-    { name: 'Rachel Martinez', role: 'Mental Health Support', location: 'West Region', email: 'rachel.m@volunteer.org', phone: '+1 (555) 890-1234', missions: 44, avatar: '👩‍⚕️' },
-    { name: 'Tom Baker', role: 'Transportation Lead', location: 'East District', email: 'tom.b@volunteer.org', phone: '+1 (555) 901-2345', missions: 33, avatar: '👨‍✈️' },
-  ];
+  const [volunteers, setVolunteers] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch('/api/volunteers')
+      .then(res => res.json())
+      .then(data => {
+        setVolunteers(data);
+      })
+      .catch(err => {
+        console.error('Failed to fetch volunteers:', err);
+      });
+  }, []);
 
   const validateName = (v: string) => /^[a-zA-Z\s]{2,}$/.test(v);
   const validateEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);

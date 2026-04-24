@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Users, AlertTriangle, Activity, Map, Settings, Bell, BarChart3, Menu, X, PieChart } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, BarChart, Bar, PieChart as RPieChart, Pie, Cell } from 'recharts';
 
@@ -24,23 +24,7 @@ const pieData = [
   { name: 'Other', value: 5, color: '#06b6d4' },
 ];
 
-const incidents = [
-  { id: 'INC-001', type: 'Flood', location: 'Downtown', severity: 'Critical', status: 'Active', time: '10m ago', team: 'Alpha' },
-  { id: 'INC-002', type: 'Fire', location: 'North Hills', severity: 'High', status: 'Active', time: '2h ago', team: 'Bravo' },
-  { id: 'INC-003', type: 'Accident', location: 'Highway 5', severity: 'Medium', status: 'Resolved', time: '5h ago', team: 'Charlie' },
-  { id: 'INC-004', type: 'Power Outage', location: 'Westside', severity: 'Low', status: 'Pending', time: '1d ago', team: 'Delta' },
-  { id: 'INC-005', type: 'Earthquake', location: 'Central', severity: 'Critical', status: 'Active', time: '30m ago', team: 'Alpha' },
-  { id: 'INC-006', type: 'Landslide', location: 'Mountain Pass', severity: 'High', status: 'Pending', time: '3h ago', team: 'Echo' },
-];
 
-const volData = [
-  { name: 'Dr. Sarah Johnson', role: 'Medical Lead', status: 'Deployed', location: 'Downtown', missions: 47 },
-  { name: 'Mike Chen', role: 'Search & Rescue', status: 'Deployed', location: 'North Hills', missions: 52 },
-  { name: 'Emily Rodriguez', role: 'Logistics', status: 'Available', location: 'Base', missions: 38 },
-  { name: 'James Williams', role: 'Communications', status: 'Available', location: 'Base', missions: 41 },
-  { name: 'Lisa Anderson', role: 'Outreach', status: 'Off-Duty', location: 'N/A', missions: 35 },
-  { name: 'David Kumar', role: 'Equipment', status: 'Deployed', location: 'Central', missions: 29 },
-];
 
 const sevCls = (s: string) => s === 'Critical' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' : s === 'High' ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400' : s === 'Medium' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400';
 const statusCls = (s: string) => s === 'Active' ? 'text-red-500' : s === 'Resolved' ? 'text-emerald-500' : 'text-yellow-500';
@@ -50,6 +34,30 @@ export function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [incidentFilter, setIncidentFilter] = useState('all');
+  const [incidents, setIncidents] = useState<any[]>([]);
+  const [volData, setVolData] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [incRes, volRes] = await Promise.all([
+          fetch('/api/incidents'),
+          fetch('/api/volunteers')
+        ]);
+        if (incRes.ok) {
+          const data = await incRes.json();
+          setIncidents(data);
+        }
+        if (volRes.ok) {
+          const data = await volRes.json();
+          setVolData(data);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const tabs = [
     { id: 'overview', icon: BarChart3, label: 'Overview' },
